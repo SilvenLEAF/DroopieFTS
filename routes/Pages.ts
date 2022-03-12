@@ -3,17 +3,28 @@
 
 import path from 'path';
 import { Router, Request, Response, NextFunction } from 'express';
-import * as dropboxController from '../controllers/Dropbox';
 const router = Router();
 
 
 
 router.get('/sync', (req: Request, res: Response, next: NextFunction) => {
-  res.sendFile(path.join(__dirname, '../client/sync.html'));
+  try {
+    res.status(200).sendFile(path.join(__dirname, '../client/sync.html'));
+  } catch (err: any) {
+    console.log(err.message);
+    console.log(err);
+    res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
+  }
 });
 
 router.get('/files', (req: Request, res: Response, next: NextFunction) => {
-  res.sendFile(path.join(__dirname, '../client/files.html'));
+  try {
+    res.status(200).sendFile(path.join(__dirname, '../client/files.html'));
+  } catch (err: any) {
+    console.log(err.message);
+    console.log(err);
+    res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
+  }
 });
 
 
