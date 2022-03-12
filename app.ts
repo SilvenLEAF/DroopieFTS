@@ -32,11 +32,11 @@ app.use(pageRoute);
 // CATCH-ALL HANDLER
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).sendFile(path.join(__dirname, 'client/index.html'));
+    return res.status(200).sendFile(path.join(__dirname, 'client/index.html'));
   } catch (err: any) {
     console.log(err.message);
     console.log(err);
-    res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
+    return res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
   }
 });
 

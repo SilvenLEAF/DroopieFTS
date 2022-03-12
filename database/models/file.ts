@@ -10,11 +10,12 @@ export interface FileAttributes {
   dropboxUpdatedAt: Date;
   visitCount: number;
   content?: string;
+  contentFts?: any;
 }
 
 export type FilePk = "dropboxFileId";
 export type FileId = File[FilePk];
-export type FileOptionalAttributes = "fileId" | "visitCount" | "content";
+export type FileOptionalAttributes = "fileId" | "visitCount" | "content" | "contentFts";
 export type FileCreationAttributes = Optional<FileAttributes, FileOptionalAttributes>;
 
 export class File extends Model<FileAttributes, FileCreationAttributes> implements FileAttributes {
@@ -26,6 +27,7 @@ export class File extends Model<FileAttributes, FileCreationAttributes> implemen
   dropboxUpdatedAt!: Date;
   visitCount!: number;
   content?: string;
+  contentFts?: any;
 
 
   static initModel(sequelize: Sequelize.Sequelize): typeof File {
@@ -70,6 +72,11 @@ export class File extends Model<FileAttributes, FileCreationAttributes> implemen
     content: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    contentFts: {
+      type: "TSVECTOR",
+      allowNull: true,
+      field: 'content_fts'
     }
   }, {
     sequelize,

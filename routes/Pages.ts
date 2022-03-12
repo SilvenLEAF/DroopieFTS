@@ -9,21 +9,21 @@ const router = Router();
 
 router.get('/sync', (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).sendFile(path.join(__dirname, '../client/sync.html'));
+    return res.status(200).sendFile(path.join(__dirname, '../client/sync.html'));
   } catch (err: any) {
     console.log(err.message);
     console.log(err);
-    res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
+    return res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
   }
 });
 
 router.get('/files', (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).sendFile(path.join(__dirname, '../client/files.html'));
+    return res.status(200).sendFile(path.join(__dirname, '../client/files.html'));
   } catch (err: any) {
     console.log(err.message);
     console.log(err);
-    res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
+    return res.status(500).json({ error: true, message: err.message || 'Error occurred while processing!' });
   }
 });
 
