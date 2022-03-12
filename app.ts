@@ -33,10 +33,13 @@ app.use(express.static(path.join(__dirname, `client`)));
 import dropboxRoute from './routes/Dropbox';
 app.use('/api/v1/droopie', dropboxRoute);
 
+import pageRoute from './routes/Pages';
+app.use(pageRoute);
+
 // CATCH-ALL HANDLER
-app.get('*', (req: Request, res: Response, next: NextFunction)=>{
+app.get('*', (req: Request, res: Response, next: NextFunction) => {
   res.sendFile(path.join(__dirname, 'client/index.html'));
-})
+});
 
 // ERRORS HANDLER
 app.use((errorObjectWithRequestAndResponse: { err: any, req: Request, res: Response }) => {
