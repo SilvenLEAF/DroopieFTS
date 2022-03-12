@@ -16,7 +16,7 @@ const database = {
 console.log(database);
 
 // __________set up sequelize connection (just like mongoose.connect())
-const sequelize = new Sequelize(
+export const sequelize = new Sequelize(
   database.name, database.user, database.password,
   {
     host: database.host,
