@@ -64,7 +64,10 @@ export const get_all_dropbox_files = async (req: Request, res: Response) => {
       type: QueryTypes.SELECT,
       replacements,
     });
-    const paginatedResponse = { count: rawResultCount[0].count, records: allRawRecords };
+    const paginatedResponse = {
+      limit: limitNum, offset: offsetNum,
+      count: rawResultCount[0].count, records: allRawRecords
+    };
     return res.json(paginatedResponse);
   } catch (err: any) {
     console.log(err.message);

@@ -1,0 +1,114 @@
+
+/* --------------------------------------
+.             VARIABLES
+-------------------------------------- */
+
+
+
+/* -----------------------------
+.          SPECIAL
+----------------------------- */
+$pureRedColor: #f00;
+
+$redColor: #f44336;
+$greenColor: #4caf50;
+$blueColor: #2196f3;
+
+$orangeColor: #ff9800;
+$yellowColor: #FFEB3B;
+$brownColor: #795548;
+
+
+$sweetPinkColor: #ff0aa7;
+$purpleColor: #917ce3;
+$secondaryBtnColor: #f1f2f4;
+
+
+$awesomeShadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+
+
+
+
+
+
+/* -----------------------------
+.          SETTINGS
+----------------------------- */
+$themeColor: $sweetPinkColor;
+
+$bodyBG: #f7f8fa;
+
+// auth door
+$demoLoginBG: $secondaryBtnColor;
+
+// loadings
+$flippingBoxColor: $themeColor;
+$spinningLoaderColor: $themeColor;
+$bouncingLoaderColor: $themeColor; 
+
+
+
+
+
+$landingIcon: url("../srcImages/landingIcon.png") center/cover;
+
+
+
+
+$footerHeight: 120px;
+$wrapperBottomMargin: -120px;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* -------------------------
+To use it, do this....
+  li {
+    @include mQ(300px. 1200px){
+      font-size: 30px;
+    }
+
+------------------------- */
+
+
+@mixin mQ($arg...) {
+  @if length($arg) == 1 {
+    @media screen and (max-width: nth($arg, 1)){
+      @content;
+    }
+  }
+
+  @if length($arg) == 2 {
+    @media screen and (max-width: nth($arg, 1)) and (min-width: nth($arg, 2)) {
+      @content;
+    }
+  }
+}
+
+
+
+
+
+@mixin mHeight($arg...) {
+  @if length($arg) == 1 {
+    @media screen and (max-height: nth($arg, 1)){
+      @content;
+    }
+  }
+
+  @if length($arg) == 2 {
+    @media screen and (max-height: nth($arg, 1)) and (min-height: nth($arg, 2)) {
+      @content;
+    }
+  }
+}
