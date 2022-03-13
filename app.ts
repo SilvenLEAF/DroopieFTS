@@ -27,9 +27,6 @@ app.use(morgan('tiny'));
 import dropboxRoute from './routes/Dropbox';
 app.use('/api/v1/droopie', dropboxRoute);
 
-// import pageRoute from './routes/Pages';
-// app.use(pageRoute);
-
 // CATCH-ALL HANDLER
 app.get('*', (req: Request, res: Response, next: NextFunction) => {
   try {

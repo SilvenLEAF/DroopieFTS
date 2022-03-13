@@ -8,6 +8,21 @@ const { File } = DBmodels;
 
 /* ----------------------------------
 .       get all files (FTS)
+. Ques: What does it do?
+. 1. Get all file instances from DB
+. 2. Validate each applied filters
+. 3. Based on the applied filters (FTS, search, sort, limit, offset etc)
+    filter out and sort the records and send it back to client (frontend)
+ 
+. IMPORTANT NOTES regarding the filters
+. 1. keywords: string|string[] is an "OR Filter"
+    Records must have at least one of its values
+. 2. mustHaveKeywords: string|string[] is an "AND Filter"
+    Records must match all of its values
+. 4. searchKey: string is a basic search. It only searches on file names
+. 5. limit: number is for limiting the response
+. 6. offset: number is for skipping specified no of records in response
+. 7. sort: string (COLUMN_NAME:TYPE_NAME) is colon seperated sort query  
 ---------------------------------- */
 interface IQuery {
   limit: string, offset: string, sort: string, searchKey: string, keywords: string, mustHaveKeywords: string,
@@ -84,7 +99,6 @@ interface ISqlFuncArg {
     searchVal?: string, sortBy: string, sortType: string,
   },
 }
-
 function getSqlStmt({ queryType, filters }: ISqlFuncArg) {
   const { keywordStr, mustHaveKeywordStr, searchVal, sortBy, sortType } = filters || {};
   const typeVal = queryType && queryType.toLowerCase().trim();
@@ -147,15 +161,5 @@ const getFTSfilters = ({ keywords, mustHaveKeywords }: {
   } catch (error) {
     console.error(error);
     return { error: true, message: 'Something went wrong while formatting FTS filters!' };
-  }
-}
-
-const lowerArray = (arr: string[]) => {
-  try {
-    if (arr && Array.isArray(arr)) return arr.map(item => item.toLowerCase().trim());
-    return [];
-  } catch (error) {
-    console.error(error);
-    return [];
   }
 }

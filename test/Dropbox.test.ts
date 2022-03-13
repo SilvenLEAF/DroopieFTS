@@ -2,7 +2,6 @@ import supertest from "supertest";
 import Ajv from 'ajv';
 const ajv = new Ajv({ strict: false })
 
-
 const rootURL = `http://localhost:5500`;
 const prefix = `/api/v1/droopie`;
 

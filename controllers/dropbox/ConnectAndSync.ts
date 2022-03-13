@@ -1,21 +1,31 @@
 import fs from 'fs';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { QueryTypes } from 'sequelize';
 import { Dropbox } from 'dropbox';
-import moment from 'moment';
 
 import { downloadFile, getAccessToken, getUserFiles, getViewLink } from '../../utils/helpers/DropboxHelpers';
-import DBmodels from '../../database/DBmodels';
 import { sequelize } from '../../database/DBmodels';
 import { extractBufferText } from '../../utils/helpers/ExtractText';
-const { File } = DBmodels;
-
-
-
 
 /* ----------------------------------
 .       sync dropbox account
+
+. Ques: What does it do?
+. 1. Get a temporary auth code of a user's dropbox account from oauth
+. 2. Validate and use it to get the real authentication token
+. 3. Use the token to get all files recursively
+. 4. Extract the text content out of the files and index it
+    (it will only extract ".pdf", ".doc" and ".docx" files)
+    (for other files it will ignore, but can add support for that)
+. 5. Do bulk upsertion on a big chunk 
+    (reducing DB calls and improving performance)
+. 6. Once done, inform user that the syncing is complete
+
+. NOTE: Each extraction is independant 
+  so even if one fails it won't affect 
+  the upsertion of other files :)
 ---------------------------------- */
+
 export const connect_and_sync_dropbox = async (req: Request, res: Response) => {
   try {
     const { code } = req.body || {};
@@ -55,7 +65,6 @@ export const connect_and_sync_dropbox = async (req: Request, res: Response) => {
     let bulkFileUpsertReplacements = {};
     let valSqlArr = [];
     let fileRecUpsertSQL = '';
-
 
     const filesLength = files.length;
     for (let i = 0; i < filesLength; i++) {
