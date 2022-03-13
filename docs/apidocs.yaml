@@ -1,0 +1,202 @@
+openapi: 3.1.0
+info:
+  version: 1.0.0
+  title: Borneo Coding Assessment
+  contact:
+    email: SilvenLEAF@gmail.com
+  x-logo:
+    url: >-
+      https://media-exp1.licdn.com/dms/image/C4D03AQGXIlNJrqaD_A/profile-displayphoto-shrink_400_400/0/1636035603893?e=1652918400&v=beta&t=q4j0GeHPZjKuPQRpxqR6rXdCZoxrl60Xo9bbPu9KRys
+  description: "This is the documentation for the API(s) developed by Manash Sarma as part of Boneo coding assessment. If you have any questions or doubts, feel free to contact on the above given email.\r\n"
+tags:
+  - name: Droopie FTS Search API(s)
+    description: >-
+      Connecting any user's Dropbox account. Syncing the Dropbox account,
+      retrieving all the files and extracting the text content and then indexing
+      them for FTS Search.
+servers:
+  - url: https://localhost:5500/api/v1/
+paths:
+  /files:
+    get:
+      summary: Get all Files
+      description: >
+        Get all files list across all the connected Dropbox user accounts.
+        Search them based on file name or content inside. Sort and pagination
+        supported.
+      tags:
+        - Droopie FTS Search API(s)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+          description: >-
+            This is for limiting the response. Its value can be between 1 and
+            100. By default it is 10.
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+          description: >-
+            This is for skipping the response. It can not be less than 0. By
+            default it is 0.
+        - name: keywords
+          in: query
+          required: false
+          description: >-
+            This is FTS "OR Search", records must have at least one of these
+            keywords. It can be either a string or an array of strings.
+          schema:
+            type: string
+        - name: mustHaveKeywords
+          in: query
+          required: false
+          description: >-
+            This is FTS "AND Search", records must have all of these keywords.
+            It can be either a string or an array of strings.
+          schema:
+            type: string
+        - name: searchKey
+          in: query
+          required: false
+          schema:
+            type: string
+          description: >-
+            This contains the seachTEXT. It is normal, basic search that
+            searches based on file name only.
+        - name: sort
+          in: query
+          required: false
+          description: >-
+            This will sort the response. Its value can be any of the followings.
+            Default is file_name:asc. Here asc mean ascending and desc means
+            descending.
+          schema:
+            type: string
+            enum:
+              - file_name:asc
+              - file_name:desc
+              - dropbox_updated_at:asc
+              - dropbox_updated_at:desc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  limit:
+                    type: number
+                    description: The provided limit for responses. By default 10.
+                    example: 10
+                  offset:
+                    type: number
+                    description: The no of items skipped. By default 0.
+                    example: 0
+                  count:
+                    type: number
+                    description: >-
+                      Total no of matches on the DB. It might not be same as the
+                      received records. Because received records can be limited.
+                      But this one is the count of all records that match the
+                      provided filters ignoring limit and offeset.
+                    example: 7579
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        file_id:
+                          type: string
+                          description: Unique id for the record on PostgreSQL DB
+                        dropbox_file_id:
+                          type: string
+                          description: Unique id for the file in Dropbox
+                        file_name:
+                          type: string
+                          description: Name of the file
+                        file_path:
+                          type: string
+                          description: >-
+                            Path of the file in Dropbox relative to the root
+                            directory of the user's account
+                        url:
+                          type: string
+                          description: >-
+                            Preview link for the file. It is only valid for 4
+                            hrs.
+                        dropbox_updated_at:
+                          type: string
+                          description: Last time of updation of the Dropbox file
+                        visit_count:
+                          type: string
+                          description: >-
+                            Visit count for this record through our DroopieFTS
+                            app.
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                schema: null
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+  /sync:
+    post:
+      summary: Connect and Sync Dropbox account
+      description: >
+        This will connect the user's Dropbox account and recursively sync all
+        files from the account. It will sync only ".pdf" and ".doc" and ".docx"
+        files only as mentioned on the assessment, ignoring other types of
+        files.
+      tags:
+        - Droopie FTS Search API(s)
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                code:
+                  type: string
+                  description: >-
+                    Dropbox auth code retrieved through oauth2.0. It is
+                    required.
+                  example: PAdE69m2tqAAAAAAAAAAVunz2gD9T3WUP9xARVpGvyA
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success message.
+                    example: Dropbox successfully synced
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                schema: null
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  message:
+                    type: string
+components: {}
