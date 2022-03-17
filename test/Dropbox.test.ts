@@ -94,7 +94,7 @@ describe.only('TESTING Dropbox CONTROLLER', () => {
     })
 
     // negative testing
-    describe('positive testings', () => {
+    describe('negative testings', () => {
       it('limit is not a number', async () => {
         const res = await request.get(url + `?limit=1to100`)
         expect(ajv.validate(ErrorSchema, res.body)).toBe(true);
