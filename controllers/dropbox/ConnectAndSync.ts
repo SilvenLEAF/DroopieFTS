@@ -99,7 +99,7 @@ export const connect_and_sync_dropbox = async (req: Request, res: Response) => {
             [`file_path${i}`]: downloadedFile.path_lower,
             [`url${i}`]: link,
             [`file_name${i}`]: downloadedFile.name,
-            [`content${i}`]: 'extractedText',
+            [`content${i}`]: extractedText,
             [`dropbox_updated_at${i}`]: downloadedFile.server_modified,
           };
           valSqlArr.push(metaStr);
