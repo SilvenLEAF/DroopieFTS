@@ -28,7 +28,7 @@ function FilesList() {
   const handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let apiUrl = `http://localhost:5500/api/v1/droopie/files?searchKey${searchKey || ''}&sort=${sort || ''}`;
+    let apiUrl = `http://localhost:5500/api/v1/droopie/files?searchKey=${searchKey || ''}&sort=${sort || ''}`;
     if (keywords) {
       const keywordsArr = keywords.split(',');
       for (let item of keywordsArr) {
